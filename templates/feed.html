@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>POSPOM - Лента</title>
+  <link rel="stylesheet" href="/static/styles/index_style.css">
+</head>
+<body class="page-feed">
+  <header class="header">
+    <img src="http://localhost:9000/pospom-media/logo.jpg" alt="МЕДСИ" class="logo-img">
+    <svg class="menu-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 12h18M3 6h18M3 18h18"/>
+    </svg>
+  </header>
+
+  <div class="feed-container">
+    <video class="video-background" autoplay loop muted playsinline>
+      <source src="{{.factor.VideoURL}}" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <a href="/feed/{{.factor.ID}}?prev=true" class="nav-up-corner">
+      <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+    </a>
+
+    <div class="feed-content">
+      <div class="author-row">
+        <img src="http://localhost:9000/pospom-media/favicon.jpg" alt="МЕДСИ" class="author-avatar">
+        <span class="author-name">МЕДСИ</span>
+      </div>
+
+      <div class="feed-header-row">
+        <div>
+          <h1 class="feed-title">{{.factor.Name}}</h1>
+          <p class="feed-subtitle">Критический возраст для кардиохирургии</p>
+        </div>
+        <div class="likes-container">
+          <svg class="like-icon" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span class="likes-count">{{len .factor.LikedBy}}</span>
+        </div>
+      </div>
+      
+      <div class="feed-description">
+        <input type="checkbox" id="more-desc" class="more-toggle">
+        
+        <div class="description-text">
+          {{.factor.Description}}
+        </div>
+        
+        <label for="more-desc" class="more-label">
+          <span class="more-open">больше</span>
+          <span class="more-close">скрыть</span>
+        </label>
+      </div>
+    </div>
+
+    <a href="/feed/{{.factor.ID}}?next=true" class="nav-down-corner">
+      <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+    </a>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/feed/{{.factor.ID}}" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/hover-feed.jpg" alt="Лента">
+      <span>Лента</span>
+    </a>
+    <a href="/add" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/add.jpg" alt="Добавить">
+      <span>Добавить</span>
+    </a>
+    <a href="/grid" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/grid.jpg" alt="Плитка">
+      <span>Плитка</span>
+    </a>
+  </nav>
+</body>
+</html>
