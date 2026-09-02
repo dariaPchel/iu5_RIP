@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POSPOM - Добавить</title>
+  <link rel="stylesheet" href="/static/styles/index_style.css">
+</head>
+<body class="page-add">
+  <header class="header">
+    <img src="http://localhost:9000/pospom-media/logo.jpg" alt="МЕДСИ" class="logo-img">
+    <svg class="menu-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 12h18M3 6h18M3 18h18"/>
+    </svg>
+  </header>
+
+  <div class="add-container">
+    <div class="form-card">
+      <label class="form-label">Фактор риска</label>
+      <input type="text" class="form-input" value="{{.factor.Name}}" placeholder="Введите название фактора">
+      
+      <label class="form-label">Описание</label>
+      <textarea class="form-input" placeholder="Введите описание">{{.factor.Description}}</textarea>
+      
+      <label class="form-label">Тип операции</label>
+      <input type="text" class="form-input" value="{{.factor.SurgeryType}}" placeholder="Введите тип операции">
+      
+      <div class="form-row">
+        <div class="form-row-item">
+          <span class="form-row-label">Возраст:</span>
+          <input type="number" class="form-row-input" value="{{.factor.Age}}">
+        </div>
+        <div class="form-row-item">
+          <span class="form-row-label">ИМТ:</span>
+          <input type="number" step="0.1" class="form-row-input" value="{{.factor.BMI}}">
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-card">
+      <button class="upload-button">Загрузить изображение</button>
+      <button class="upload-button">Загрузить видео</button>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-save">Сохранить</button>
+      <a href="/grid" class="btn-cancel">Отменить</a>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/feed/1" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/feed.jpg" alt="Лента">
+      <span>Лента</span>
+    </a>
+    <a href="/add" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/hover-add.jpg" alt="Добавить">
+      <span>Добавить</span>
+    </a>
+    <a href="/grid" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/grid.jpg" alt="Плитка">
+      <span>Плитка</span>
+    </a>
+  </nav>
+</body>
+</html>
