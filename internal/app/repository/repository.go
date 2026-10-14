@@ -28,7 +28,7 @@ type RiskFactor struct {
 	ImageURL       string
 	VideoURL       string
 	Status         string
-	LikedBy        []string
+	LikedBy        []string // Массив ID пользователей, поставивших лайк
 }
 
 func (r *Repository) GetRiskFactors() ([]RiskFactor, error) {
@@ -46,7 +46,7 @@ func (r *Repository) GetRiskFactors() ([]RiskFactor, error) {
 			ImageURL:       r.MinIOURL + "/heart-surgery.jpg",
 			VideoURL:       r.MinIOURL + "/surgery-video.mp4",
 			Status:         "published",
-			LikedBy:        []string{"user_101", "user_205", "user_333", "user_412", "user_589"}, // Пример ID
+			LikedBy:        []string{"user_101", "user_205", "user_333", "user_412", "user_589"},
 		},
 		{
 			ID:             2,
@@ -102,7 +102,6 @@ func (r *Repository) GetNextRiskFactor(currentID int) (RiskFactor, error) {
 	if err != nil {
 		return RiskFactor{}, err
 	}
-
 	currentIndex := -1
 	for i, factor := range factors {
 		if factor.ID == currentID {
@@ -110,14 +109,12 @@ func (r *Repository) GetNextRiskFactor(currentID int) (RiskFactor, error) {
 			break
 		}
 	}
-
 	for i := 1; i <= len(factors); i++ {
 		index := (currentIndex + i) % len(factors)
 		if factors[index].Status != "deleted" {
 			return factors[index], nil
 		}
 	}
-
 	return factors[0], nil
 }
 
@@ -126,7 +123,6 @@ func (r *Repository) GetPrevRiskFactor(currentID int) (RiskFactor, error) {
 	if err != nil {
 		return RiskFactor{}, err
 	}
-
 	currentIndex := -1
 	for i, factor := range factors {
 		if factor.ID == currentID {
@@ -134,14 +130,12 @@ func (r *Repository) GetPrevRiskFactor(currentID int) (RiskFactor, error) {
 			break
 		}
 	}
-
 	for i := 1; i <= len(factors); i++ {
 		index := (currentIndex - i + len(factors)) % len(factors)
 		if factors[index].Status != "deleted" {
 			return factors[index], nil
 		}
 	}
-
 	return factors[0], nil
 }
 
