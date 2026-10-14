@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POSPOM - Плитка</title>
+  <link rel="stylesheet" href="/static/styles/index_style.css">
+</head>
+<body class="page-grid">
+  <header class="header">
+    <img src="http://localhost:9000/pospom-media/logo.jpg" alt="МЕДСИ" class="logo-img">
+    <svg class="menu-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 12h18M3 6h18M3 18h18"/>
+    </svg>
+  </header>
+
+  <div class="grid-container">
+    <form method="GET" action="/risk_factors_grid" class="filter-form">
+      <label for="maxAge">Фильтр по возрасту пациентов</label>
+      <div class="filter-input-wrapper">
+        <input type="range" id="maxAge" name="maxAge" class="filter-slider" 
+               min="0" max="100" value="{{if .maxAge}}{{.maxAge}}{{else}}50{{end}}" 
+               oninput="document.getElementById('ageValue').textContent = this.value">
+        <span class="filter-value" id="ageValue">{{if .maxAge}}{{.maxAge}}{{else}}50{{end}}</span>
+        <button type="submit" class="filter-btn">Применить</button>
+      </div>
+    </form>
+
+    <div class="grid-cards">
+      {{range .factors}}
+      <div class="grid-card-wrapper">
+        <a href="/risk_factors_feed/{{.ID}}" class="grid-card">
+          <img src="{{.ImageURL}}" alt="{{.Name}}" class="grid-card-image" 
+               onerror="this.src='/static/image/default-photo.png'">
+          <div class="grid-card-content">
+            <h3 class="grid-card-title">{{.Name}}</h3>
+            <div class="grid-card-footer">
+              <div class="card-likes">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>{{.LikesCount}}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Кнопка удаления бирюзовая (вместо красной) -->
+        <form method="POST" action="/risk_factors/delete/{{.ID}}" class="delete-form">
+          <button type="submit" class="delete-btn">Удалить</button>
+        </form>
+      </div>
+      {{end}}
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/risk_factors_feed/1" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/feed.jpg" alt="Лента">
+      <span>Лента</span>
+    </a>
+    <a href="/risk_factors_add" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/add.jpg" alt="Добавить">
+      <span>Добавить</span>
+    </a>
+    <a href="/risk_factors_grid" class="nav-item active">
+      <img src="http://localhost:9000/pospom-media/hover-grid.jpg" alt="Плитка">
+      <span>Плитка</span>
+    </a>
+  </nav>
+</body>
+</html>
