@@ -1,0 +1,298 @@
+basePath: /
+definitions:
+  handler.LikeRequest:
+    properties:
+      action:
+        enum:
+        - 0
+        - 1
+        type: integer
+    type: object
+  handler.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: Backend для SPA POSPOM (Лабораторная работа 4)
+  title: POSPOM API
+  version: "1.0"
+paths:
+  /api/risk_factors:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список опубликованных факторов риска с опциональным
+        фильтром по возрасту
+      parameters:
+      - description: Максимальный возраст
+        in: query
+        name: maxAge
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Получение списка факторов риска
+      tags:
+      - RiskFactors
+    post:
+      consumes:
+      - multipart/form-data
+      description: Создает новый фактор риска или обновляет существующий черновик
+        (с загрузкой файлов)
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Создание или обновление фактора риска
+      tags:
+      - RiskFactors
+  /api/risk_factors/{id}:
+    delete:
+      description: Мягкое удаление фактора риска (доступно только создателю)
+      parameters:
+      - description: ID фактора риска
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Удаление фактора риска
+      tags:
+      - RiskFactors
+  /api/risk_factors/{id}/like:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет или удаляет лайк у фактора риска
+      parameters:
+      - description: ID фактора риска
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Действие (1 - лайк, 0 - удалить лайк)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LikeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Лайк фактора риска
+      tags:
+      - RiskFactors
+  /api/risk_factors/{id}/publish:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Публикует черновик фактора риска (доступно только создателю)
+      parameters:
+      - description: ID фактора риска
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Публикация фактора риска
+      tags:
+      - RiskFactors
+  /api/risk_factors/draft:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает черновик фактора риска текущего пользователя
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Получение черновика
+      tags:
+      - RiskFactors
+  /api/risk_factors/feed:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает один фактор риска для ленты (первый, следующий или предыдущий)
+      parameters:
+      - description: Получить следующий
+        in: query
+        name: next
+        type: boolean
+      - description: Получить предыдущий
+        in: query
+        name: prev
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Получение ленты факторов риска
+      tags:
+      - RiskFactors
+  /api/risk_factors/feed/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает один фактор риска для ленты (первый, следующий или предыдущий)
+      parameters:
+      - description: ID фактора риска
+        in: path
+        name: id
+        type: integer
+      - description: Получить следующий
+        in: query
+        name: next
+        type: boolean
+      - description: Получить предыдущий
+        in: query
+        name: prev
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Получение ленты факторов риска
+      tags:
+      - RiskFactors
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Проверяет учетные данные и возвращает JWT токен
+      parameters:
+      - description: Данные для входа
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Аутентификация пользователя
+      tags:
+      - Auth
+  /api/users/logout:
+    post:
+      description: Добавляет текущий JWT токен в блеклист Redis
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Выход пользователя
+      tags:
+      - Auth
+  /api/users/register:
+    post:
+      consumes:
+      - application/json
+      description: Регистрирует нового пользователя с хешированием пароля
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Регистрация пользователя
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

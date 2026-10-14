@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POSPOM - Добавить</title>
+  <link rel="stylesheet" href="/static/styles/index_style.css">
+</head>
+<body class="page-add">
+  <header class="header">
+    <img src="http://localhost:9000/pospom-media/logo.jpg" alt="МЕДСИ" class="logo-img">
+    <svg class="menu-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 12h18M3 6h18M3 18h18"/>
+    </svg>
+  </header>
+
+  <div class="add-container">
+    <h1 class="add-title">Добавить фактор риска</h1>
+
+    {{if eq .factor.Status "draft"}}
+      <!-- ШАГ 2: ЧЕРНОВИК УЖЕ СОЗДАН - показываем описание, возраст и ИМТ -->
+      
+      <div class="upload-section">
+        <div class="upload-card" style="margin-bottom: 16px;">
+          <img src="{{.factor.ImageURL}}" alt="Изображение" class="upload-preview" 
+               onerror="this.src='/static/image/default-photo.png'">
+        </div>
+        <div class="upload-card">
+          <video src="{{.factor.VideoURL}}" class="upload-preview-video" 
+                 autoplay loop muted playsinline
+                 onerror="this.src='/static/image/default_video.mp4'">
+          </video>
+        </div>
+      </div>
+
+      <form method="POST" action="/risk_factors/publish/{{.factor.ID}}">
+        <div class="form-card">
+          <h3 style="margin-bottom: 16px; color: #00ABAA;">Заполните данные для публикации</h3>
+          
+          <label class="form-label">Название</label>
+          <input type="text" class="form-input" value="{{.factor.Name}}" readonly style="background: #f0f0f0;">
+          
+          <label class="form-label">Описание</label>
+          <textarea name="description" class="form-input" rows="3" placeholder="Краткое описание фактора риска..." required></textarea>
+          
+          <div class="form-row">
+            <div>
+              <label class="form-label">Возраст (лет)</label>
+              <input type="number" name="age" class="form-input" placeholder="70" required>
+            </div>
+            <div>
+              <label class="form-label">ИМТ</label>
+              <input type="number" step="0.1" name="bmi" class="form-input" placeholder="24.5" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save">Опубликовать карточку</button>
+      </form>
+
+    {{else}}
+      <!-- ШАГ 1: ЧЕРНОВИКА НЕТ - только фото, видео и название -->
+      
+      <div class="upload-section">
+        <div class="upload-card" style="margin-bottom: 16px;">
+          <img src="/static/image/default-photo.png" alt="Изображение" class="upload-preview">
+        </div>
+        <div class="upload-card">
+          <video src="/static/image/default_video.mp4" 
+                 class="upload-preview-video" 
+                 autoplay loop muted playsinline>
+          </video>
+        </div>
+      </div>
+
+      <form method="POST" action="/risk_factors">
+        <div class="form-card">
+          <label class="form-label">Название фактора риска</label>
+          <input type="text" name="name" class="form-input" placeholder="Например: Возраст старше 70 лет" required>
+        </div>
+
+        <button type="submit" class="btn-save">Далее (Сохранить черновик)</button>
+      </form>
+    {{end}}
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/risk_factors_feed/1" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/feed.jpg" alt="Лента">
+      <span>Лента</span>
+    </a>
+    <a href="/risk_factors_add" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/hover-add.jpg" alt="Добавить">
+      <span>Добавить</span>
+    </a>
+    <a href="/risk_factors_grid" class="nav-item">
+      <img src="http://localhost:9000/pospom-media/grid.jpg" alt="Плитка">
+      <span>Плитка</span>
+    </a>
+  </nav>
+</body>
+</html>
